@@ -1,11 +1,12 @@
 package com.example.myapplication1
 
-import io.ktor.client.*
-import io.ktor.client.engine.android.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.android.Android
+import io.ktor.client.request.get
+import io.ktor.client.request.headers
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.decodeFromString
 
 object SupabaseClientInstance {
     const val SUPABASE_URL = "https://mgklafqwfppkmcawjwuc.supabase.co"
