@@ -3,54 +3,66 @@ package com.example.myapplication1
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.launch
 
 class ProfileActivity : AppCompatActivity() {
-    private lateinit var emailText: TextView
-    private lateinit var logoutBtn: Button
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        emailText = findViewById(R.id.emailText)
-        logoutBtn = findViewById(R.id.logoutBtn)
+        val emailText = findViewById<TextView>(R.id.emailText)
+        val firstNameInput = findViewById<EditText>(R.id.firstNameInput)
+        val lastNameInput = findViewById<EditText>(R.id.lastNameInput)
+        val addressInput = findViewById<EditText>(R.id.addressInput)
+        val saveBtn = findViewById<Button>(R.id.saveBtn)
+        val logoutBtn = findViewById<Button>(R.id.logoutBtn)
+        val backBtn = findViewById<Button>(R.id.backProfileBtn)
 
-        loadProfile()
+        lifecycleScope.launch {
+            try {
+                val user = SupabaseClientInstance.client.auth.currentUserOrNull()
+                emailText.text = "Email: ${user?.email ?: "Не авторизован"}"
+            } catch (e: Exception) {
+                emailText.text = "Ошибка загрузки"
+            }
+        }
+
+        saveBtn.setOnClickListener {
+            val firstName = firstNameInput.text.toString()
+            val lastName = lastNameInput.text.toString()
+            val address = addressInput.text.toString()
+
+            if (firstName.isNotEmpty() || lastName.isNotEmpty() || address.isNotEmpty()) {
+                Toast.makeText(
+                    this,
+                    "Данные сохранены!\nИмя: $firstName\nФамилия: $lastName\nАдрес: $address",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                Toast.makeText(this, "Заполните хотя бы одно поле", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         logoutBtn.setOnClickListener {
-            logout()
-        }
-    }
-
-    private fun loadProfile() {
-        lifecycleScope.launch {
-            try {
-                val user = SupabaseClient.client.auth.currentUserOrNull()
-                if (user != null) {
-                    emailText.text = "Email: ${user.email}"
+            lifecycleScope.launch {
+                try {
+                    SupabaseClientInstance.client.auth.signOut()
+                    Toast.makeText(this@ProfileActivity, "Вы вышли", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@ProfileActivity, LoginActivity::class.java))
+                    finish()
+                } catch (e: Exception) {
+                    Toast.makeText(this@ProfileActivity, "Ошибка: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
-            } catch (e: Exception) {
-                Toast.makeText(this@ProfileActivity, "Ошибка загрузки профиля", Toast.LENGTH_SHORT).show()
             }
         }
-    }
 
-    private fun logout() {
-        lifecycleScope.launch {
-            try {
-                SupabaseClient.client.auth.signOut()
-                Toast.makeText(this@ProfileActivity, "Вы вышли из аккаунта", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this@ProfileActivity, LoginActivity::class.java))
-                finish()
-            } catch (e: Exception) {
-                Toast.makeText(this@ProfileActivity, "Ошибка выхода", Toast.LENGTH_SHORT).show()
-            }
+        backBtn.setOnClickListener {
+            finish()
         }
     }
 }

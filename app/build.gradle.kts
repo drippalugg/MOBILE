@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    kotlin("android")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -13,41 +14,40 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
         }
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
+    // AndroidX
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.activity:activity-ktx:1.8.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.0.0")
-    implementation("io.github.jan-tennert.supabase:gotrue-kt:2.0.0")
-    implementation("io.ktor:ktor-client-android:2.3.5")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("com.google.android.material:material:1.9.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+
+    // Kotlin
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.1")
+
+    // HTTP для Supabase
+    implementation("io.ktor:ktor-client-android:2.3.5")
+    implementation("io.ktor:ktor-client-serialization:2.3.5")
+
+    // JSON
+    implementation("com.google.code.gson:gson:2.10.1")
 }

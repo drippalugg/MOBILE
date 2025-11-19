@@ -3,46 +3,86 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFF8F9FA"
-    android:padding="20dp">
+    android:background="#FFF8F9FA">
 
     <!-- Заголовок -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp">
+        android:orientation="horizontal"
+        android:background="#FF4F81E8"
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Master Parts"
-            android:textSize="32sp"
-            android:textColor="#FF667EEA"
-            android:textStyle="bold"
-            android:gravity="center" />
+            android:layout_weight="1"
+            android:text=" Master Parts"
+            android:textSize="24sp"
+            android:textColor="#FFFFFFFF"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/profileBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="👤"
+            android:textSize="18sp"
+            android:background="@android:color/transparent"
+            android:textColor="#FFFFFFFF"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/cartBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="🛒"
+            android:textSize="18sp"
+            android:background="@android:color/transparent"
+            android:textColor="#FFFFFFFF" />
     </LinearLayout>
 
-    <!-- Поисковая строка -->
-    <LinearLayout
+    <!-- Категории -->
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="horizontal">
+        android:text="Категории"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#FF4F81E8"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="4dp" />
 
-        <EditText
-            android:id="@+id/searchInput"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Поиск запчастей..."
-            android:inputType="text"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
-            android:textColor="#FF333333"
-            android:textColorHint="#FF999999" />
-    </LinearLayout>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/categoriesContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
+    </HorizontalScrollView>
+
+    <!-- Поиск -->
+    <EditText
+        android:id="@+id/searchInput"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:hint="Поиск товаров..."
+        android:inputType="text"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:background="#FFFFFFFF"
+        android:textColor="#FF333333"
+        android:textColorHint="#FF999999" />
 
     <!-- Список товаров -->
     <ListView
@@ -51,78 +91,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:divider="#FFE0E0E0"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="1dp"
+        android:padding="8dp" />
 
-    <!-- Нижняя панель (корзина и итог) -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#FFFFFFFF"
-        android:padding="10dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Корзина"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="#FF333333" />
-
-            <TextView
-                android:id="@+id/cartCount"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="#FF667EEA"
-                android:text="0"
-                android:textColor="#FFFFFFFF"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Итого"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="#FF333333" />
-
-            <TextView
-                android:id="@+id/totalPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 ₽"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#FFF39C12" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/checkoutBtn"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Оформить заказ"
-            android:background="#FF667EEA"
-            android:textColor="#FFFFFFFF"
-            android:textStyle="bold"
-            android:textSize="16sp" />
-    </LinearLayout>
 </LinearLayout>

@@ -19,7 +19,7 @@ class ProductAdapter(
 
     override fun getItem(position: Int): Any = products[position]
 
-    override fun getItemId(position: Int): Long = products[position].id.toLong()
+    override fun getItemId(position: Int): Long = products[position].id
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val product = products[position]
@@ -50,11 +50,11 @@ class ProductAdapter(
         }
 
         val statusView = TextView(context).apply {
-            text = if (product.inStock) "✓ В наличии" else "✗ Нет"
+            text = if (product.in_stock) "✓ В наличии" else "✗ Нет"
             textSize = 12f
             setTextColor(
                 Color.parseColor(
-                    if (product.inStock) "#28A745" else "#DC3545"
+                    if (product.in_stock) "#28A745" else "#DC3545"
                 )
             )
         }
@@ -81,7 +81,7 @@ class ProductAdapter(
         val buyBtn = Button(context).apply {
             text = "В корзину"
             textSize = 12f
-            isEnabled = product.inStock
+            isEnabled = product.in_stock  // И ТУТ ТОЖЕ!
             setTextColor(Color.WHITE)
             setBackgroundColor(Color.parseColor("#667EEA"))
             setPadding(10, 5, 10, 5)

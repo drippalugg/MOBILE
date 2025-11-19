@@ -3,67 +3,144 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFF8F9FA"
-    android:padding="20dp">
+    android:background="#FFF8F9FA">
 
     <!-- Заголовок -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:background="#FF667EEA"
-        android:padding="20dp"
-        android:gravity="center"
-        android:layout_marginBottom="30dp">
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <Button
+            android:id="@+id/backProfileBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="←"
+            android:textSize="24sp"
+            android:background="@android:color/transparent"
+            android:textColor="#FFFFFFFF" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="👤 Профиль"
-            android:textSize="28sp"
+            android:layout_weight="1"
+            android:text="Профиль"
+            android:textSize="24sp"
             android:textColor="#FFFFFFFF"
             android:textStyle="bold"
             android:gravity="center" />
-
     </LinearLayout>
 
-    <!-- Email -->
-    <LinearLayout
+    <!-- Контент -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#FFFFFFFF"
-        android:padding="20dp"
-        android:layout_marginBottom="20dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Аккаунт"
-            android:textSize="14sp"
-            android:textColor="#FF666666"
-            android:textStyle="bold"
-            android:layout_marginBottom="10dp" />
+            android:orientation="vertical"
+            android:padding="20dp">
 
-        <TextView
-            android:id="@+id/emailText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Email: загрузка..."
-            android:textSize="16sp"
-            android:textColor="#FF333333" />
+            <TextView
+                android:id="@+id/emailText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email: user@example.com"
+                android:textSize="16sp"
+                android:textColor="#FF333333"
+                android:layout_marginBottom="20dp" />
 
-    </LinearLayout>
+            <!-- Имя -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Имя"
+                android:textSize="14sp"
+                android:textColor="#FF667EEA"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
 
-    <!-- Кнопка выхода -->
-    <Button
-        android:id="@+id/logoutBtn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Выйти из аккаунта"
-        android:background="#FFDC3545"
-        android:textColor="#FFFFFFFF"
-        android:textStyle="bold"
-        android:textSize="16sp" />
+            <EditText
+                android:id="@+id/firstNameInput"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Введите имя"
+                android:inputType="text"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:background="#FFFFFFFF"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Фамилия -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Фамилия"
+                android:textSize="14sp"
+                android:textColor="#FF667EEA"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/lastNameInput"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Введите фамилию"
+                android:inputType="text"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:background="#FFFFFFFF"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Адрес -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Адрес проживания"
+                android:textSize="14sp"
+                android:textColor="#FF667EEA"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/addressInput"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Введите адрес"
+                android:inputType="text"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:background="#FFFFFFFF"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Кнопка сохранить -->
+            <Button
+                android:id="@+id/saveBtn"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="Сохранить данные"
+                android:background="#FF28A745"
+                android:textColor="#FFFFFFFF"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Кнопка выход -->
+            <Button
+                android:id="@+id/logoutBtn"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="Выход"
+                android:background="#FFDC3545"
+                android:textColor="#FFFFFFFF"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

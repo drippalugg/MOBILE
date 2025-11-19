@@ -1,116 +1,161 @@
 package com.example.myapplication1
 
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ListView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
-data class Product(
-    val id: Int,
-    val name: String,
-    val price: Double,
-    val inStock: Boolean
-)
+object CartManager {
+    val cartItems = mutableListOf<CartItem>()
+    val allProducts = mutableListOf<Product>()
+}
 
 class MainActivity : AppCompatActivity() {
-
-    private val allProducts = mutableListOf(
-        Product(1, "Фильтр воздушный", 450.0, true),
-        Product(2, "Масло моторное 5W-30", 850.0, true),
-        Product(3, "Прокладка ГБЦ", 1200.0, false),
-        Product(4, "Замок зажигания", 2500.0, true),
-        Product(5, "Тормозные колодки", 1800.0, true),
-        Product(6, "Свечи зажигания комплект", 650.0, true),
-        Product(7, "Ремень ГРМ", 3200.0, false),
-        Product(8, "Фильтр топливный", 550.0, true),
-        Product(9, "Патрубок радиатора", 750.0, true),
-        Product(10, "Генератор", 5500.0, true)
-    )
-
-    private val cart = mutableListOf<Product>()
+    private lateinit var categoriesContainer: LinearLayout
     private lateinit var productsList: ListView
     private lateinit var searchInput: EditText
-    private lateinit var cartCount: TextView
-    private lateinit var totalPrice: TextView
-    private lateinit var checkoutBtn: Button
-    private lateinit var adapter: ProductAdapter
+    private lateinit var profileBtn: Button
+    private lateinit var cartBtn: Button
+    private lateinit var productsAdapter: ProductAdapter
+    private val categories = mutableListOf<Category>()
+    private val filteredProducts = mutableListOf<Product>()
+    private var currentCategoryId: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        categoriesContainer = findViewById(R.id.categoriesContainer)
         productsList = findViewById(R.id.productsList)
         searchInput = findViewById(R.id.searchInput)
-        cartCount = findViewById(R.id.cartCount)
-        totalPrice = findViewById(R.id.totalPrice)
-        checkoutBtn = findViewById(R.id.checkoutBtn)
+        profileBtn = findViewById(R.id.profileBtn)
+        cartBtn = findViewById(R.id.cartBtn)
 
-        displayProducts(allProducts)
+        productsAdapter = ProductAdapter(this, filteredProducts) { product ->
+            val existingItem = CartManager.cartItems.find { it.product_id == product.id }
+            if (existingItem != null) {
+                existingItem.quantity++
+            } else {
+                CartManager.cartItems.add(
+                    CartItem(
+                        id = CartManager.cartItems.size.toLong() + 1,
+                        product_id = product.id,
+                        quantity = 1
+                    )
+                )
+            }
+            Toast.makeText(this, "Добавлено: ${product.name}", Toast.LENGTH_SHORT).show()
+        }
+
+        productsList.adapter = productsAdapter
 
         searchInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filterProducts(s.toString())
+                updateFilteredProducts(s.toString())
             }
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        checkoutBtn.setOnClickListener {
-            if (cart.isEmpty()) {
-                Toast.makeText(this, "Корзина пуста!", Toast.LENGTH_SHORT).show()
-            } else {
-                val total = cart.sumOf { it.price }.toInt()
-                Toast.makeText(
-                    this,
-                    "Заказ оформлен! Итого: $total ₽",
-                    Toast.LENGTH_LONG
-                ).show()
-                cart.clear()
-                updateCartUI()
+        profileBtn.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
+
+        cartBtn.setOnClickListener {
+            startActivity(Intent(this, CartActivity::class.java))
+        }
+
+        loadCategories()
+        loadProducts()
+    }
+
+    private fun loadCategories() {
+        lifecycleScope.launch {
+            try {
+                val categoryList = SupabaseClientInstance.client
+                    .postgrest["categories"]
+                    .select()
+                    .decodeList<Category>()
+
+                categories.clear()
+                categories.addAll(categoryList)
+                displayCategories()
+
+                Toast.makeText(this@MainActivity, "Категории загружены: ${categoryList.size}", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this@MainActivity, "Ошибка загрузки категорий: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun displayProducts(items: List<Product>) {
-        adapter = ProductAdapter(this, items) { product ->
-            if (product.inStock) {
-                addToCart(product)
-            } else {
-                Toast.makeText(this, "Товар недоступен", Toast.LENGTH_SHORT).show()
+    private fun displayCategories() {
+        categoriesContainer.removeAllViews()
+
+        val allButton = Button(this).apply {
+            text = "Все"
+            setBackgroundColor(if (currentCategoryId == null) Color.parseColor("#2196F3") else Color.parseColor("#CCCCCC"))
+            setTextColor(Color.WHITE)
+            setPadding(24, 12, 24, 12)
+            setOnClickListener {
+                currentCategoryId = null
+                displayCategories()
+                updateFilteredProducts("")
             }
         }
-        productsList.adapter = adapter
+        categoriesContainer.addView(allButton)
+
+        categories.forEach { category ->
+            val button = Button(this).apply {
+                text = category.name
+                setBackgroundColor(if (currentCategoryId == category.id) Color.parseColor("#2196F3") else Color.parseColor("#CCCCCC"))
+                setTextColor(Color.WHITE)
+                setPadding(24, 12, 24, 12)
+                setOnClickListener {
+                    currentCategoryId = category.id
+                    displayCategories()
+                    updateFilteredProducts("")
+                }
+            }
+            categoriesContainer.addView(button)
+        }
     }
 
-    private fun filterProducts(query: String) {
-        val filtered = if (query.isBlank()) {
-            allProducts
-        } else {
-            allProducts.filter { product ->
-                product.name.contains(query, ignoreCase = true)
+    private fun loadProducts() {
+        lifecycleScope.launch {
+            try {
+                val productList = SupabaseClientInstance.client
+                    .postgrest["products"]
+                    .select()
+                    .decodeList<Product>()
+
+                CartManager.allProducts.clear()
+                CartManager.allProducts.addAll(productList)
+                updateFilteredProducts("")
+
+                Toast.makeText(this@MainActivity, "Товары загружены: ${productList.size}", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this@MainActivity, "Ошибка загрузки товаров: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
-        displayProducts(filtered)
     }
 
-    private fun addToCart(product: Product) {
-        cart.add(product)
-        updateCartUI()
-        Toast.makeText(
-            this,
-            "${product.name} добавлен в корзину",
-            Toast.LENGTH_SHORT
-        ).show()
-    }
+    private fun updateFilteredProducts(query: String) {
+        val filtered = CartManager.allProducts.filter { product ->
+            val matchesCategory = currentCategoryId?.let { product.category_id == it } ?: true
+            val matchesSearch = product.name.contains(query, ignoreCase = true) ||
+                    product.description.contains(query, ignoreCase = true)
+            matchesCategory && matchesSearch
+        }
 
-    private fun updateCartUI() {
-        cartCount.text = cart.size.toString()
-        val total = cart.sumOf { it.price }.toInt()
-        totalPrice.text = "$total ₽"
+        filteredProducts.clear()
+        filteredProducts.addAll(filtered)
+        productsAdapter.notifyDataSetChanged()
     }
 }
