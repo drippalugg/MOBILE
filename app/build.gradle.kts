@@ -32,11 +32,6 @@ android {
     }
 }
 
-repositories {
-    mavenCentral()
-    google()
-}
-
 dependencies {
     // AndroidX
     implementation("androidx.appcompat:appcompat:1.6.1")
