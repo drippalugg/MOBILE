@@ -32,6 +32,11 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+    google()
+}
+
 dependencies {
     // AndroidX
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -47,6 +52,12 @@ dependencies {
     // HTTP для Supabase
     implementation("io.ktor:ktor-client-android:2.3.5")
     implementation("io.ktor:ktor-client-serialization:2.3.5")
+
+    // Supabase Auth, Postgrest, Realtime
+    implementation("io.github.jan-tennert:supabase-kt:1.4.0")
+    implementation("io.github.jan-tennert:auth-kt:1.4.0")
+    implementation("io.github.jan-tennert:postgrest-kt:1.4.0")
+    implementation("io.github.jan-tennert:realtime-kt:1.4.0")
 
     // JSON
     implementation("com.google.code.gson:gson:2.10.1")
