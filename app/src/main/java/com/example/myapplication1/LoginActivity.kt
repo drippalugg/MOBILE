@@ -14,7 +14,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Проверяем есть ли уже активная сессия
+
         if (SessionManager.isSessionActive(this)) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()

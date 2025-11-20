@@ -17,7 +17,7 @@ object SessionManager {
             putLong(KEY_SESSION_TIME, System.currentTimeMillis())
             apply()
         }
-        Log.d("SessionManager", "✅ Сессия сохранена: $email")
+        Log.d("SessionManager", "Сессия сохранена: $email")
     }
 
     fun getSession(context: Context): Pair<String, String>? {
@@ -26,10 +26,10 @@ object SessionManager {
         val token = prefs.getString(KEY_TOKEN, null)
 
         return if (email != null && token != null) {
-            Log.d("SessionManager", "✅ Сессия найдена: $email")
+            Log.d("SessionManager", "Сессия найдена: $email")
             Pair(email, token)
         } else {
-            Log.d("SessionManager", "❌ Сессия не найдена")
+            Log.d("SessionManager", "Сессия не найдена")
             null
         }
     }
@@ -42,7 +42,7 @@ object SessionManager {
     fun clearSession(context: Context) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit().clear().apply()
-        Log.d("SessionManager", "❌ Сессия очищена")
+        Log.d("SessionManager", "Сессия очищена")
     }
 
     fun isSessionActive(context: Context): Boolean {

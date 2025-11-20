@@ -26,8 +26,8 @@
 
         <Button
             android:id="@+id/profileBtn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:text="👤"
             android:textSize="24sp"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -36,8 +36,8 @@
 
         <Button
             android:id="@+id/cartBtn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:text="🛒"
             android:textSize="24sp"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -81,7 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_margin="16dp"
-        android:hint="🔍 Поиск товаров..."
+        android:hint="Поиск товаров..."
         android:inputType="text"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"

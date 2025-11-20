@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             // Сохраняем корзину
             CartManager.saveToStorage(this)
 
-            Toast.makeText(this, "${product.name} добавлен в корзину ✅", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "${product.name} добавлен в корзину ", Toast.LENGTH_SHORT).show()
             productsList.adapter = productsAdapter
         }
 
@@ -105,16 +105,12 @@ class MainActivity : AppCompatActivity() {
                 categories.addAll(categoryList)
                 displayCategories()
 
-                Toast.makeText(
-                    this@MainActivity,
-                    "✅ Загружено категорий: ${categoryList.size}",
-                    Toast.LENGTH_SHORT
-                ).show()
+
             } catch (e: Exception) {
                 e.printStackTrace()
                 Toast.makeText(
                     this@MainActivity,
-                    "❌ Ошибка загрузки категорий: ${e.message}",
+                    "Ошибка загрузки категорий: ${e.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -167,16 +163,11 @@ class MainActivity : AppCompatActivity() {
                 CartManager.allProducts.addAll(productList)
                 updateFilteredProducts()
 
-                Toast.makeText(
-                    this@MainActivity,
-                    "✅ Загружено товаров: ${productList.size}",
-                    Toast.LENGTH_SHORT
-                ).show()
             } catch (e: Exception) {
                 e.printStackTrace()
                 Toast.makeText(
                     this@MainActivity,
-                    "❌ Ошибка загрузки товаров: ${e.message}",
+                    "Ошибка загрузки товаров: ${e.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }

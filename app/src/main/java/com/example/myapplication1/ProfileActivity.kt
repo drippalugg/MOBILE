@@ -47,7 +47,7 @@ class ProfileActivity : AppCompatActivity() {
 
             Toast.makeText(
                 this,
-                "✅ Профиль сохранён: $firstName $lastName",
+                "Профиль сохранён: $firstName $lastName",
                 Toast.LENGTH_SHORT
             ).show()
         }

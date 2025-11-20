@@ -90,7 +90,7 @@
         android:layout_height="55dp"
         android:text="Регистрация"
         android:background="#E0E0E0"
-        android:textColor="#1F3A93"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:textSize="16sp" />
 

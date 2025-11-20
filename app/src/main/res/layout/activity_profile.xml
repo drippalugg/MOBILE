@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#FF667EEA"
+        android:background="#1F3A93"
         android:padding="16dp"
         android:gravity="center_vertical">
 
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:text="Имя"
                 android:textSize="14sp"
-                android:textColor="#FF667EEA"
+                android:textColor="#1F3A93"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
 
@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:text="Фамилия"
                 android:textSize="14sp"
-                android:textColor="#FF667EEA"
+                android:textColor="#1F3A93"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
 
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:text="Адрес проживания"
                 android:textSize="14sp"
-                android:textColor="#FF667EEA"
+                android:textColor="#1F3A93"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
 

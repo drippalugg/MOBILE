@@ -17,7 +17,7 @@ object ProfileDataManager {
             putString(KEY_ADDRESS, address)
             apply()
         }
-        Log.d("ProfileDataManager", "✅ Профиль сохранён: $firstName $lastName")
+        Log.d("ProfileDataManager", "Профиль сохранён: $firstName $lastName")
     }
 
     fun getFirstName(context: Context): String {
@@ -38,6 +38,6 @@ object ProfileDataManager {
     fun clearProfile(context: Context) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit().clear().apply()
-        Log.d("ProfileDataManager", "❌ Профиль очищен")
+        Log.d("ProfileDataManager", "Профиль очищен")
     }
 }

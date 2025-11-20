@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:text="Регистрация" android:textSize="22sp"
-        android:textColor="#FF667EEA" android:textStyle="bold"
+        android:textColor="#1F3A93" android:textStyle="bold"
         android:gravity="center" android:layout_marginBottom="20dp"/>
 
     <EditText
@@ -31,13 +31,13 @@
     <Button
         android:id="@+id/signUpBtn"
         android:layout_width="match_parent" android:layout_height="50dp"
-        android:text="Зарегистрироваться" android:background="#FF667EEA"
+        android:text="Зарегистрироваться" android:background="#1F3A93"
         android:textColor="#FFFFFFFF"/>
 
     <TextView
         android:id="@+id/loginLink"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="Есть аккаунт? Войдите"
-        android:textColor="#FF667EEA" android:gravity="center"
+        android:textColor="#1F3A93" android:gravity="center"
         android:layout_marginTop="24dp" android:layout_gravity="center"/>
 </LinearLayout>

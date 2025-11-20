@@ -50,7 +50,7 @@ class ProductAdapter(
         }
 
         val statusView = TextView(context).apply {
-            text = if (product.in_stock) "✓ В наличии" else "✗ Нет"
+            text = if (product.in_stock) "✓ В наличии" else "✗ Нет в наличии"
             textSize = 12f
             setTextColor(
                 Color.parseColor(
