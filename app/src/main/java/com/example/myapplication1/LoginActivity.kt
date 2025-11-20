@@ -37,15 +37,14 @@ class LoginActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
+                    SupabaseClientInstance.client.auth.signInWith(email = email, password = password)
                     // Сохраняем сессию
                     SessionManager.saveSession(this@LoginActivity, email)
-
                     Toast.makeText(
                         this@LoginActivity,
                         "Вы успешно вошли!",
                         Toast.LENGTH_SHORT
                     ).show()
-
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
                 } catch (e: Exception) {
