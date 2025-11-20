@@ -45,6 +45,7 @@ class SignUpActivity : AppCompatActivity() {
                 try {
                     SupabaseClientInstance.client.auth.signUpWith(email = email, password = password)
                     Toast.makeText(this@SignUpActivity, "Регистрация успешна!", Toast.LENGTH_LONG).show()
+                    SessionManager.saveSession(this@SignUpActivity, email)
                     startActivity(Intent(this@SignUpActivity, LoginActivity::class.java))
                     finish()
                 } catch (e: Exception) {
