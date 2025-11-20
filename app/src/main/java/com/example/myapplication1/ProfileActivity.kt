@@ -25,6 +25,9 @@ class ProfileActivity : AppCompatActivity() {
         val userEmail = SessionManager.getUserEmail(this)
         emailText.text = "Email: $userEmail"
 
+        // Загружаем сохранённые данные профиля
+        loadProfileData(firstNameInput, lastNameInput, addressInput)
+
         backBtn.setOnClickListener {
             finish()
         }
@@ -39,16 +42,20 @@ class ProfileActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Сохраняем профиль
+            ProfileDataManager.saveProfile(this, firstName, lastName, address)
+
             Toast.makeText(
                 this,
-                "Профиль сохранён: $firstName $lastName",
+                "✅ Профиль сохранён: $firstName $lastName",
                 Toast.LENGTH_SHORT
             ).show()
         }
 
         logoutBtn.setOnClickListener {
-            // Очищаем сессию
+            // Очищаем сессию и профиль
             SessionManager.clearSession(this)
+            ProfileDataManager.clearProfile(this)
 
             Toast.makeText(this, "Вы вышли из аккаунта", Toast.LENGTH_SHORT).show()
 
@@ -56,5 +63,15 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
+    }
+
+    private fun loadProfileData(
+        firstNameInput: EditText,
+        lastNameInput: EditText,
+        addressInput: EditText
+    ) {
+        firstNameInput.setText(ProfileDataManager.getFirstName(this))
+        lastNameInput.setText(ProfileDataManager.getLastName(this))
+        addressInput.setText(ProfileDataManager.getAddress(this))
     }
 }

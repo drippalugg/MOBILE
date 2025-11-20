@@ -10,11 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
-object CartManager {
-    val cartItems = mutableListOf<CartItem>()
-    val allProducts = mutableListOf<Product>()
-}
-
 class MainActivity : AppCompatActivity() {
     private lateinit var categoriesContainer: LinearLayout
     private lateinit var productsList: ListView
@@ -44,6 +39,9 @@ class MainActivity : AppCompatActivity() {
         profileBtn = findViewById(R.id.profileBtn)
         cartBtn = findViewById(R.id.cartBtn)
 
+        // Загружаем корзину из хранилища
+        CartManager.loadFromStorage(this)
+
         productsAdapter = ProductAdapter(this, filteredProducts) { product ->
             val existingItem = CartManager.cartItems.find { it.product_id == product.id }
             if (existingItem != null) {
@@ -57,7 +55,10 @@ class MainActivity : AppCompatActivity() {
                     )
                 )
             }
-            Toast.makeText(this, "${product.name} добавлен в корзину", Toast.LENGTH_SHORT).show()
+            // Сохраняем корзину
+            CartManager.saveToStorage(this)
+
+            Toast.makeText(this, "${product.name} добавлен в корзину ✅", Toast.LENGTH_SHORT).show()
             productsList.adapter = productsAdapter
         }
 
@@ -86,6 +87,12 @@ class MainActivity : AppCompatActivity() {
         loadProducts()
     }
 
+    override fun onPause() {
+        super.onPause()
+        // Сохраняем корзину при выходе из Activity
+        CartManager.saveToStorage(this)
+    }
+
     private fun loadCategories() {
         lifecycleScope.launch {
             try {
@@ -100,14 +107,14 @@ class MainActivity : AppCompatActivity() {
 
                 Toast.makeText(
                     this@MainActivity,
-                    "Загружено категорий: ${categoryList.size}",
+                    "✅ Загружено категорий: ${categoryList.size}",
                     Toast.LENGTH_SHORT
                 ).show()
             } catch (e: Exception) {
                 e.printStackTrace()
                 Toast.makeText(
                     this@MainActivity,
-                    "Ошибка загрузки категорий: ${e.message}",
+                    "❌ Ошибка загрузки категорий: ${e.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -162,14 +169,14 @@ class MainActivity : AppCompatActivity() {
 
                 Toast.makeText(
                     this@MainActivity,
-                    "Загружено товаров: ${productList.size}",
+                    "✅ Загружено товаров: ${productList.size}",
                     Toast.LENGTH_SHORT
                 ).show()
             } catch (e: Exception) {
                 e.printStackTrace()
                 Toast.makeText(
                     this@MainActivity,
-                    "Ошибка загрузки товаров: ${e.message}",
+                    "❌ Ошибка загрузки товаров: ${e.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }

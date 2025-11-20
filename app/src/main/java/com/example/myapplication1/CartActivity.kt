@@ -8,30 +8,25 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class CartActivity : AppCompatActivity() {
-
-    private lateinit var adapter: CartItemAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart)
 
-        val cartList: ListView = findViewById(R.id.cartList)
-        val totalText: TextView = findViewById(R.id.cartTotal)
-        val backBtn: Button = findViewById(R.id.backBtn)
-        val checkoutBtn: Button = findViewById(R.id.checkoutCartBtn)
+        val backBtn = findViewById<Button>(R.id.backBtn)
+        val cartListView = findViewById<ListView>(R.id.cartListView)
+        val totalPriceText = findViewById<TextView>(R.id.totalPriceText)
+        val checkoutBtn = findViewById<Button>(R.id.checkoutBtn)
+        val clearCartBtn = findViewById<Button>(R.id.clearCartBtn)
 
-        // Инициализируется адаптер
-        adapter = CartItemAdapter(
-            this,
-            CartManager.cartItems,
-            CartManager.allProducts
-        ) {
-            updateTotal(totalText)
-            adapter.notifyDataSetChanged()
+        val adapter = CartItemAdapter(this, CartManager.cartItems) {
+            updateTotal(totalPriceText)
+            // Сохраняем после удаления
+            CartManager.saveToStorage(this)
         }
 
-        cartList.adapter = adapter
-        updateTotal(totalText)
+        cartListView.adapter = adapter
+
+        updateTotal(totalPriceText)
 
         backBtn.setOnClickListener {
             finish()
@@ -39,26 +34,40 @@ class CartActivity : AppCompatActivity() {
 
         checkoutBtn.setOnClickListener {
             if (CartManager.cartItems.isEmpty()) {
-                Toast.makeText(this, "Корзина пуста", Toast.LENGTH_SHORT).show()
-            } else {
-                val total = CartManager.cartItems.sumOf { item ->
-                    val product = CartManager.allProducts.find { it.id == item.product_id }
-                    (product?.price ?: 0.0) * item.quantity
-                }.toInt()
-                Toast.makeText(this, "Заказ оформлен на $total ₽", Toast.LENGTH_LONG).show()
-                CartManager.cartItems.clear()
-                adapter.notifyDataSetChanged()
-                updateTotal(totalText)
-                finish()
+                Toast.makeText(this, "Корзина пуста!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+            Toast.makeText(this, "✅ Заказ оформлен!", Toast.LENGTH_SHORT).show()
+            CartManager.cartItems.clear()
+            CartManager.saveToStorage(this)
+            adapter.notifyDataSetChanged()
+            updateTotal(totalPriceText)
+        }
+
+        clearCartBtn.setOnClickListener {
+            if (CartManager.cartItems.isEmpty()) {
+                Toast.makeText(this, "Корзина уже пуста", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            CartManager.cartItems.clear()
+            CartManager.saveToStorage(this)
+            adapter.notifyDataSetChanged()
+            updateTotal(totalPriceText)
+            Toast.makeText(this, "❌ Корзина очищена", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun updateTotal(totalText: TextView) {
-        val total = CartManager.cartItems.sumOf { item ->
-            val product = CartManager.allProducts.find { it.id == item.product_id }
-            (product?.price ?: 0.0) * item.quantity
-        }.toInt()
-        totalText.text = "Итого: $total ₽"
+    private fun updateTotal(totalPriceText: TextView) {
+        var total = 0.0
+        CartManager.cartItems.forEach { cartItem ->
+            val product = CartManager.allProducts.find { it.id == cartItem.product_id }
+            product?.let { total += it.price * cartItem.quantity }
+        }
+        totalPriceText.text = "Итого: ${"%.2f".format(total)} ₽"
+    }
+
+    override fun onPause() {
+        super.onPause()
+        CartManager.saveToStorage(this)
     }
 }
