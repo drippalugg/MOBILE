@@ -1,37 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical" android:padding="20dp"
-    android:background="#FFF8F9FA">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5"
+    android:gravity="center"
+    android:padding="24dp">
+
+    <!-- Logo/Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Master Parts"
+        android:textSize="36sp"
+        android:textColor="#1F3A93"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="12dp" />
 
     <TextView
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="Авторизация" android:textSize="22sp"
-        android:textColor="#FF667EEA" android:textStyle="bold"
-        android:gravity="center" android:layout_marginBottom="20dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Автомагазин"
+        android:textSize="16sp"
+        android:textColor="#666666"
+        android:gravity="center"
+        android:layout_marginBottom="48dp" />
+
+    <!-- Email Input -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:textSize="14sp"
+        android:textColor="#1F3A93"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
 
     <EditText
         android:id="@+id/emailInput"
-        android:layout_width="match_parent" android:layout_height="50dp"
-        android:hint="Email" android:inputType="textEmailAddress"
-        android:layout_marginBottom="10dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Введите email"
+        android:inputType="textEmailAddress"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:textColor="#333333"
+        android:layout_marginBottom="20dp" />
+
+    <!-- Password Input -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Пароль"
+        android:textSize="14sp"
+        android:textColor="#1F3A93"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
 
     <EditText
         android:id="@+id/passwordInput"
-        android:layout_width="match_parent" android:layout_height="50dp"
-        android:hint="Пароль" android:inputType="textPassword"
-        android:layout_marginBottom="16dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Введите пароль"
+        android:inputType="textPassword"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:textColor="#333333"
+        android:layout_marginBottom="32dp" />
 
+    <!-- Login Button -->
     <Button
         android:id="@+id/loginBtn"
-        android:layout_width="match_parent" android:layout_height="50dp"
-        android:text="Войти" android:background="#FF667EEA"
-        android:textColor="#FFFFFFFF"/>
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="Вход"
+        android:background="#1F3A93"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp" />
 
-    <TextView
-        android:id="@+id/signUpLink"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="Нет аккаунта? Зарегистрируйтесь"
-        android:textColor="#FF667EEA" android:gravity="center"
-        android:layout_marginTop="24dp" android:layout_gravity="center"/>
+    <!-- Signup Button -->
+    <Button
+        android:id="@+id/signupBtn"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="Регистрация"
+        android:background="#E0E0E0"
+        android:textColor="#1F3A93"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
 </LinearLayout>

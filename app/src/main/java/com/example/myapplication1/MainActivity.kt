@@ -30,6 +30,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Проверяем сессию
+        if (!SessionManager.isSessionActive(this)) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+
+        // Инициализируем views
         categoriesContainer = findViewById(R.id.categoriesContainer)
         productsList = findViewById(R.id.productsList)
         searchInput = findViewById(R.id.searchInput)
@@ -43,17 +51,19 @@ class MainActivity : AppCompatActivity() {
             } else {
                 CartManager.cartItems.add(
                     CartItem(
-                        id = CartManager.cartItems.size.toLong() + 1,
+                        id = CartManager.cartItems.size.toLong(),
                         product_id = product.id,
                         quantity = 1
                     )
                 )
             }
-            Toast.makeText(this, "Добавлено: ${product.name}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "${product.name} добавлен в корзину", Toast.LENGTH_SHORT).show()
+            productsList.adapter = productsAdapter
         }
 
         productsList.adapter = productsAdapter
 
+        // Поиск
         searchInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -62,6 +72,7 @@ class MainActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
+        // Кнопки навигации
         profileBtn.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
@@ -70,6 +81,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, CartActivity::class.java))
         }
 
+        // Загружаем данные
         loadCategories()
         loadProducts()
     }
@@ -86,10 +98,18 @@ class MainActivity : AppCompatActivity() {
                 categories.addAll(categoryList)
                 displayCategories()
 
-                Toast.makeText(this@MainActivity, "Категории загружены: ${categoryList.size}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@MainActivity,
+                    "Загружено категорий: ${categoryList.size}",
+                    Toast.LENGTH_SHORT
+                ).show()
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(this@MainActivity, "Ошибка загрузки категорий: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@MainActivity,
+                    "Ошибка загрузки категорий: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -97,6 +117,7 @@ class MainActivity : AppCompatActivity() {
     private fun displayCategories() {
         categoriesContainer.removeAllViews()
 
+        // Кнопка "Все"
         val allButton = Button(this).apply {
             text = "Все"
             setBackgroundColor(if (currentCategoryId == null) Color.parseColor("#2196F3") else Color.parseColor("#CCCCCC"))
@@ -105,11 +126,12 @@ class MainActivity : AppCompatActivity() {
             setOnClickListener {
                 currentCategoryId = null
                 displayCategories()
-                updateFilteredProducts("")
+                updateFilteredProducts()
             }
         }
         categoriesContainer.addView(allButton)
 
+        // Кнопки категорий
         categories.forEach { category ->
             val button = Button(this).apply {
                 text = category.name
@@ -119,7 +141,7 @@ class MainActivity : AppCompatActivity() {
                 setOnClickListener {
                     currentCategoryId = category.id
                     displayCategories()
-                    updateFilteredProducts("")
+                    updateFilteredProducts()
                 }
             }
             categoriesContainer.addView(button)
@@ -136,17 +158,25 @@ class MainActivity : AppCompatActivity() {
 
                 CartManager.allProducts.clear()
                 CartManager.allProducts.addAll(productList)
-                updateFilteredProducts("")
+                updateFilteredProducts()
 
-                Toast.makeText(this@MainActivity, "Товары загружены: ${productList.size}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@MainActivity,
+                    "Загружено товаров: ${productList.size}",
+                    Toast.LENGTH_SHORT
+                ).show()
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(this@MainActivity, "Ошибка загрузки товаров: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@MainActivity,
+                    "Ошибка загрузки товаров: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
 
-    private fun updateFilteredProducts(query: String) {
+    private fun updateFilteredProducts(query: String = "") {
         val filtered = CartManager.allProducts.filter { product ->
             val matchesCategory = currentCategoryId?.let { product.category_id == it } ?: true
             val matchesSearch = product.name.contains(query, ignoreCase = true) ||

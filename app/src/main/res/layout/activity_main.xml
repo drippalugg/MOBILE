@@ -3,61 +3,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFF8F9FA">
+    android:background="#F5F5F5">
 
-    <!-- Заголовок -->
+    <!-- Header with gradient effect -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#FF4F81E8"
+        android:background="#1F3A93"
         android:padding="16dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:elevation="8dp">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text=" Master Parts"
+            android:text="Master Parts"
             android:textSize="24sp"
-            android:textColor="#FFFFFFFF"
+            android:textColor="#FFFFFF"
             android:textStyle="bold" />
 
         <Button
             android:id="@+id/profileBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:text="👤"
-            android:textSize="18sp"
-            android:background="@android:color/transparent"
-            android:textColor="#FFFFFFFF"
+            android:textSize="24sp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:textColor="#FFFFFF"
             android:layout_marginEnd="8dp" />
 
         <Button
             android:id="@+id/cartBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:text="🛒"
-            android:textSize="18sp"
-            android:background="@android:color/transparent"
-            android:textColor="#FFFFFFFF" />
+            android:textSize="24sp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:textColor="#FFFFFF" />
+
     </LinearLayout>
 
-    <!-- Категории -->
+    <!-- Categories Label -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Категории"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:textColor="#FF4F81E8"
-        android:layout_marginTop="8dp"
+        android:textColor="#1F3A93"
+        android:layout_marginTop="12dp"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="4dp" />
+        android:layout_marginBottom="8dp" />
 
+    <!-- Categories Scroll -->
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/categoriesContainer"
@@ -68,30 +72,32 @@
             android:paddingEnd="16dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp" />
+
     </HorizontalScrollView>
 
-    <!-- Поиск -->
+    <!-- Search Bar -->
     <EditText
         android:id="@+id/searchInput"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="48dp"
         android:layout_margin="16dp"
-        android:hint="Поиск товаров..."
+        android:hint="🔍 Поиск товаров..."
         android:inputType="text"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-        android:background="#FFFFFFFF"
-        android:textColor="#FF333333"
-        android:textColorHint="#FF999999" />
+        android:background="#FFFFFF"
+        android:textColor="#333333"
+        android:textColorHint="#999999" />
 
-    <!-- Список товаров -->
+    <!-- Products List -->
     <ListView
         android:id="@+id/productsList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:divider="#FFE0E0E0"
+        android:divider="#E0E0E0"
         android:dividerHeight="1dp"
-        android:padding="8dp" />
+        android:padding="8dp"
+        android:listSelector="@android:color/transparent" />
 
 </LinearLayout>
