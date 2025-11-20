@@ -1,72 +1,44 @@
 package com.example.myapplication1
 
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.android.Android
-import io.ktor.client.request.get
-import io.ktor.client.request.headers
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
-import kotlinx.serialization.json.Json
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.auth.Auth
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.builtin.Email
+import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.realtime.Realtime
 
 object SupabaseClientInstance {
     const val SUPABASE_URL = "https://mgklafqwfppkmcawjwuc.supabase.co"
     const val SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1na2xhZnF3ZnBwa21jYXdqd3VjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM0OTY4ODMsImV4cCI6MjA3OTA3Mjg4M30.ScQU-AIQvmmNZ77tExaWbfLyHYJV-dvvy3fZzbK_Bao"
 
-    private val httpClient = HttpClient(Android)
-    private val json = Json { ignoreUnknownKeys = true }
-
-    object client {
-        object auth {
-            suspend fun signInWith(email: String, password: String) {
-                // Mock для работы
-            }
-
-            suspend fun signUpWith(email: String, password: String) {
-                // Mock для работы
-            }
-
-            suspend fun signOut() {
-                // Mock для работы
-            }
-
-            suspend fun currentUserOrNull(): UserInfo? {
-                return UserInfo(email = "user@example.com")
-            }
+    val client = createSupabaseClient(
+        supabaseUrl = SUPABASE_URL,
+        supabaseKey = SUPABASE_ANON_KEY
+    ) {
+        install(Auth) {
+            autoRefreshToken = true
+            autoLoadUser = true
         }
-
-        object postgrest {
-            operator fun get(table: String): TableRef {
-                return TableRef(table)
-            }
-        }
+        install(Postgrest)
+        install(Realtime)
     }
 }
 
-data class UserInfo(val email: String)
-
-class TableRef(val table: String) {
-    fun select(): SelectQuery {
-        return SelectQuery(table)
-    }
-}
-
-class SelectQuery(val table: String) {
-    suspend inline fun <reified T> decodeList(): List<T> {
-        val httpClient = HttpClient(Android)
-        val json = Json { ignoreUnknownKeys = true }
-
-        val url = "${SupabaseClientInstance.SUPABASE_URL}/rest/v1/$table?select=*"
-
-        val response: HttpResponse = httpClient.get(url) {
-            headers {
-                append("apikey", SupabaseClientInstance.SUPABASE_ANON_KEY)
-                append("Authorization", "Bearer ${SupabaseClientInstance.SUPABASE_ANON_KEY}")
-            }
-        }
-
-        val responseText = response.bodyAsText()
-        httpClient.close()
-
-        return json.decodeFromString<List<T>>(responseText)
-    }
-}
+// Вспомогательные импорты для Короутин
+// Подробное объяснение:
+// Если SupabaseClient введение signInWith(Email) в LoginActivity выдает ошибки,
+// это может быть три причины:
+//
+// 1. Это построение DSL supabase-kt 1.4.0 требует определения значений
+//    внутри котекста Email() { }
+//
+// 2. В kotlinя, при использовании signInWith(Email), НЕ используйте обычные скобки
+//    для аргументов. Корректный синтаксис:
+//    client.auth.signInWith(Email) { email = "..."; password = "..." }
+//
+// 3. Если build.gradle не содержит зависимости supabase-kt (выще указаны),
+//    то ДОБАВИТЕ их в dependencies {
+//    implementationio.github.jan-tennertauth-kt1.4.0
+//    implementationio.github.jan-tennertpostgrest-kt1.4.0
+//    implementationio.github.jan-tennertrealtime-kt1.4.0
